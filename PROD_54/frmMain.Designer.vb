@@ -27,6 +27,11 @@ Partial Class mainForm
         Me.lblRecords = New System.Windows.Forms.Label()
         Me.txtOrderNum = New System.Windows.Forms.TextBox()
         Me.lblOrderNum = New System.Windows.Forms.Label()
+        Me.btnSearch = New System.Windows.Forms.Button()
+        Me.lblSelected = New System.Windows.Forms.Label()
+        Me.btnDisplay = New System.Windows.Forms.Button()
+        Me.lblRootFolder = New System.Windows.Forms.Label()
+        Me.lblVersion = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -34,12 +39,14 @@ Partial Class mainForm
         '
         Me.DataGridView1.AllowUserToAddRows = False
         Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridView1.Location = New System.Drawing.Point(12, 12)
         Me.DataGridView1.MultiSelect = False
         Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridView1.ShowCellErrors = False
         Me.DataGridView1.ShowCellToolTips = False
         Me.DataGridView1.ShowEditingIcon = False
@@ -69,7 +76,7 @@ Partial Class mainForm
         '
         Me.txtOrderNum.Location = New System.Drawing.Point(115, 393)
         Me.txtOrderNum.Name = "txtOrderNum"
-        Me.txtOrderNum.Size = New System.Drawing.Size(247, 20)
+        Me.txtOrderNum.Size = New System.Drawing.Size(141, 20)
         Me.txtOrderNum.TabIndex = 32
         '
         'lblOrderNum
@@ -81,11 +88,61 @@ Partial Class mainForm
         Me.lblOrderNum.TabIndex = 33
         Me.lblOrderNum.Text = "Order Number"
         '
+        'btnSearch
+        '
+        Me.btnSearch.Location = New System.Drawing.Point(272, 391)
+        Me.btnSearch.Name = "btnSearch"
+        Me.btnSearch.Size = New System.Drawing.Size(60, 22)
+        Me.btnSearch.TabIndex = 34
+        Me.btnSearch.Text = "Search"
+        Me.btnSearch.UseVisualStyleBackColor = True
+        '
+        'lblSelected
+        '
+        Me.lblSelected.AutoSize = True
+        Me.lblSelected.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSelected.Location = New System.Drawing.Point(426, 396)
+        Me.lblSelected.Name = "lblSelected"
+        Me.lblSelected.Size = New System.Drawing.Size(0, 18)
+        Me.lblSelected.TabIndex = 35
+        '
+        'btnDisplay
+        '
+        Me.btnDisplay.Location = New System.Drawing.Point(338, 391)
+        Me.btnDisplay.Name = "btnDisplay"
+        Me.btnDisplay.Size = New System.Drawing.Size(60, 22)
+        Me.btnDisplay.TabIndex = 36
+        Me.btnDisplay.Text = "Display"
+        Me.btnDisplay.UseVisualStyleBackColor = True
+        '
+        'lblRootFolder
+        '
+        Me.lblRootFolder.AutoSize = True
+        Me.lblRootFolder.Location = New System.Drawing.Point(62, 425)
+        Me.lblRootFolder.Name = "lblRootFolder"
+        Me.lblRootFolder.Size = New System.Drawing.Size(44, 13)
+        Me.lblRootFolder.TabIndex = 37
+        Me.lblRootFolder.Text = "location"
+        '
+        'lblVersion
+        '
+        Me.lblVersion.AutoSize = True
+        Me.lblVersion.Location = New System.Drawing.Point(15, 425)
+        Me.lblVersion.Name = "lblVersion"
+        Me.lblVersion.Size = New System.Drawing.Size(41, 13)
+        Me.lblVersion.TabIndex = 38
+        Me.lblVersion.Text = "version"
+        '
         'mainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.lblVersion)
+        Me.Controls.Add(Me.lblRootFolder)
+        Me.Controls.Add(Me.btnDisplay)
+        Me.Controls.Add(Me.lblSelected)
+        Me.Controls.Add(Me.btnSearch)
         Me.Controls.Add(Me.lblOrderNum)
         Me.Controls.Add(Me.txtOrderNum)
         Me.Controls.Add(Me.lblRecords)
@@ -104,4 +161,9 @@ Partial Class mainForm
     Friend WithEvents lblRecords As Label
     Friend WithEvents txtOrderNum As TextBox
     Friend WithEvents lblOrderNum As Label
+    Friend WithEvents btnSearch As Button
+    Friend WithEvents lblSelected As Label
+    Friend WithEvents btnDisplay As Button
+    Friend WithEvents lblRootFolder As Label
+    Friend WithEvents lblVersion As Label
 End Class

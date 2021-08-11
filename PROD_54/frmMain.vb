@@ -1,11 +1,11 @@
 ﻿
 Imports System.Configuration
 Imports LinxLib.DataLib
-
+Imports Excel = Microsoft.Office.Interop.Excel
 
 Public Class mainForm
 
-    Public sExeVersion As String = "1.00"
+    Public sExeVersion As String = "v1.00"
 
 
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
@@ -24,6 +24,7 @@ Public Class mainForm
 
         Dim xDataAccess As New DataAccess
 
+        lblVersion.Text = sExeVersion
 
         Try
 
@@ -33,7 +34,7 @@ Public Class mainForm
             xDataAccess.SetTableName = "vw_oracle_tij_label_data"
             xDataAccess.SetOrder = "unique_id"
             If (Trim(sOrderNum) = "") Then
-                xDataAccess.SetDBWhere = "1=1"
+                xDataAccess.SetDBWhere = ConfigurationManager.AppSettings("whereclause")
             Else
                 xDataAccess.SetDBWhere = "unique_id like '%" & Trim(sOrderNum) & "%'"
             End If
@@ -62,7 +63,7 @@ Public Class mainForm
 
         End Try
 
-
+        lblRootFolder.Text = ConfigurationManager.AppSettings("rootfolder")
 
 
     End Sub
@@ -81,127 +82,150 @@ Public Class mainForm
         If (Me.Height < 400) Then Me.Height = 400
         If (Me.Width < 670) Then Me.Width = 670
         Me.DataGridView1.Width = Me.Width - 40
-        Me.DataGridView1.Height = Me.Height - 100
-        Me.btnExit.Top = Me.Height - 65
-        Me.btnExit.Left = Me.Width - 80
+        Me.DataGridView1.Height = Me.Height - 150
+        Me.btnExit.Top = Me.Height - 100
+        Me.btnExit.Left = Me.Width - 100
+
         Me.lblOrderNum.Top = Me.btnExit.Top
         Me.txtOrderNum.Top = Me.btnExit.Top
-
-        '       Me.btnCreateSK.Top = Me.btnExit.Top
-        '       Me.lblDistributor.Top = Me.btnExit.Top
         Me.lblRecords.Top = Me.btnExit.Top
-        '        Me.lblEmail.Top = Me.btnExit.Top
+        Me.btnDisplay.Top = Me.btnExit.Top
+        Me.btnSearch.Top = Me.btnExit.Top
+        Me.lblSelected.Top = Me.btnExit.Top
+        Me.lblRootFolder.Top = Me.btnExit.Top + 40
+        Me.lblVersion.Top = Me.btnExit.Top + 40
+
+
 
     End Sub
 
-    Private Sub chkActive_CheckedChanged(sender As Object, e As EventArgs)
-
-        'If chkActive.Checked Then
-        '    LoadMainFormDisplay("Y")
-        'Else
-        '    LoadMainFormDisplay("")
-        'End If
-
-
-    End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        'Try
-        '    lblDistributor.Text = Trim(DataGridView1.Rows(e.RowIndex).Cells(5).Value.ToString)
-        '    lblEmail.Text = Trim(DataGridView1.Rows(e.RowIndex).Cells(4).Value.ToString)
-        'Catch
+        Try
+            lblSelected.Text = Trim(DataGridView1.Rows(e.RowIndex).Cells(2).Value.ToString) & " " & Trim(DataGridView1.Rows(e.RowIndex).Cells(9).Value.ToString)
+        Catch
 
-        'End Try
-
-
-    End Sub
-
-    Private Sub btnCreateSK_Click(sender As Object, e As EventArgs)
-
-        'If Trim(lblDistributor.Text) = "" Then
-        '    MsgBox("No email for user")
-        '    Exit Sub
-        'End If
-
-        'If lblDistributor.Text = "Distributor" Then
-        '    MsgBox("Please click on distributor in the list above")
-        '    Exit Sub
-        'End If
-
-        'MsgBox("Create service key routine for " & lblDistributor.Text)
-
-        'CreateTextFile(lblDistributor.Text)
-
-
-
-
-
-
-
+        End Try
 
 
     End Sub
 
-    Private Sub CreateTextFile(sDistributor As String)
+    Private Sub FindExcelSheet(ByVal sName As String)
 
+        Dim sFilelabel As String = ConfigurationManager.AppSettings("filelabel")
+        Dim sTypes() As String = sFilelabel.Split(",")
+        Dim sFileName As String = ""
 
-        'Dim tDatafetch(0) As DataIn
-        'Dim bResult As Boolean
-        'bResult = False
+        Dim bFoundFile As Boolean = False
 
-        'Dim xDataAccess As New DataAccess
+        Dim i As Integer = 0
 
-        'Dim sServiceKeyFreq As String = ""
-        'Dim sNoOfKeys As String = ""
+        Try
+            For i = 0 To sTypes.Length - 1
+                sFileName = lblRootFolder.Text & "\" & sTypes(i) + " (" & sName & ").xls"
 
-        'Try
+                If My.Computer.FileSystem.FileExists(sFileName) Then
+                    DisplayExcelFile(sFileName)
+                    bFoundFile = True
+                End If
 
-        '    xDataAccess.Initialise()
+            Next
 
-        '    xDataAccess.SetScheme = "dbo"
-        '    xDataAccess.SetTableName = "Users"
-        '    xDataAccess.SetOrder = ""
-        '    xDataAccess.SetDBWhere = "Distributor='" & sDistributor & "'"
-
-        '    ReDim Preserve tDatafetch(2)
-        '    tDatafetch(0).ColName = "Distributor"
-        '    tDatafetch(1).ColName = "ServiceKeyFreq"
-        '    tDatafetch(2).ColName = "NoOfKeys"
-
-        '    Dim oBindingSource As BindingSource
-        '    oBindingSource = xDataAccess.GetRecordsDataByID(tDatafetch)
-
-        '    sServiceKeyFreq = CType(oBindingSource.List(0), DataRowView).Item(1).ToString
-        '    sNoOfKeys = CType(oBindingSource.List(0), DataRowView).Item(2).ToString
+            If Not bFoundFile Then
+                MsgBox("Sorry - unable to find a matching Excel file ")
+            End If
 
 
 
-        'Catch
+        Catch ex As Exception
+            MsgBox("Error in FindExcelSheet " & ex.ToString)
+
+        End Try
+
+
+    End Sub
+
+    Private Sub DisplayExcelFile(ByVal sFilename As String)
+
+
+        Try
+
+            Dim Proceed As Boolean = False
+            Dim xlApp As Excel.Application = Nothing
+            Dim xlWorkBooks As Excel.Workbooks = Nothing
+            Dim xlWorkBook As Excel.Workbook = Nothing
+            Dim xlWorkSheet As Excel.Worksheet = Nothing
+            Dim xlWorkSheets As Excel.Sheets = Nothing
+            Dim xlCells As Excel.Range = Nothing
+            xlApp = New Excel.Application
+            xlApp.DisplayAlerts = False
+            xlWorkBooks = xlApp.Workbooks
+            xlWorkBook = xlWorkBooks.Open(sFilename)
+            xlApp.Visible = True
+            xlWorkSheets = xlWorkBook.Sheets
+            For x As Integer = 1 To xlWorkSheets.Count
+                xlWorkSheet = CType(xlWorkSheets(x), Excel.Worksheet)
+                If x = 2 Then
+                    '                    If xlWorkSheet.Name.Substring(0, 4) = "LABEL" Then
+                    Proceed = True
+                    Exit For
+                End If
+                Runtime.InteropServices.Marshal.FinalReleaseComObject(xlWorkSheet)
+                xlWorkSheet = Nothing
+            Next
+            If Proceed Then
+                xlWorkSheet.Activate()
+                MessageBox.Show("Close this message box to close this Excel sheet", "Spares Cell TIJ Cartridges", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+            xlWorkBook.Close()
+            xlApp.UserControl = True
+            xlApp.Quit()
+            ReleaseComObject(xlCells)
+            ReleaseComObject(xlWorkSheets)
+            ReleaseComObject(xlWorkSheet)
+            ReleaseComObject(xlWorkBook)
+            ReleaseComObject(xlWorkBooks)
+            ReleaseComObject(xlApp)
+
+        Catch ex As Exception
+
+            MsgBox("Error in DisplayExcelSheet " & ex.ToString)
+
+        End Try
 
 
 
-        'End Try
+
+    End Sub
+
+    Public Sub ReleaseComObject(ByVal obj As Object)
+        Try
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+            obj = Nothing
+        Catch ex As Exception
+            obj = Nothing
+        End Try
+    End Sub
+
+    Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
 
 
-        'xDataAccess.Dispose()
-
-        'Dim sSKFileName As String = ConfigurationManager.AppSettings("ServicePasswordFileName")
-        'Dim sSKPath As String = ConfigurationManager.AppSettings("ServicePasswordPath")
-
-        'If System.IO.File.Exists(sSKPath & "\" & sSKFileName) Then
-        '    System.IO.File.Delete(sSKPath & "\" & sSKFileName)
-        'End If
-
-        'Dim sTemp As String = sDistributor & "," & sServiceKeyFreq & "," & sNoOfKeys
-        'IO.File.WriteAllText(sSKPath & "\" & sSKFileName, sTemp)
+        LoadMainFormDisplay(Trim(txtOrderNum.Text))
 
 
     End Sub
 
     Private Sub txtOrderNum_TextChanged(sender As Object, e As EventArgs) Handles txtOrderNum.TextChanged
 
-        LoadMainFormDisplay(txtOrderNum.Text)
+    End Sub
 
+    Private Sub btnDisplay_Click(sender As Object, e As EventArgs) Handles btnDisplay.Click
+
+        If lblSelected.Text <> "" Then
+            FindExcelSheet(lblSelected.Text)
+        Else
+            MsgBox("Please select an order")
+        End If
 
     End Sub
 End Class

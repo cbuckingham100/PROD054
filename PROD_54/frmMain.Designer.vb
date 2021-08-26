@@ -32,6 +32,8 @@ Partial Class mainForm
         Me.btnDisplay = New System.Windows.Forms.Button()
         Me.lblRootFolder = New System.Windows.Forms.Label()
         Me.lblVersion = New System.Windows.Forms.Label()
+        Me.btnSelect = New System.Windows.Forms.Button()
+        Me.lblOracleOrder = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -46,7 +48,8 @@ Partial Class mainForm
         Me.DataGridView1.Location = New System.Drawing.Point(12, 12)
         Me.DataGridView1.MultiSelect = False
         Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.DataGridView1.ReadOnly = True
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.ShowCellErrors = False
         Me.DataGridView1.ShowCellToolTips = False
         Me.DataGridView1.ShowEditingIcon = False
@@ -56,7 +59,7 @@ Partial Class mainForm
         '
         'btnExit
         '
-        Me.btnExit.Location = New System.Drawing.Point(728, 416)
+        Me.btnExit.Location = New System.Drawing.Point(725, 440)
         Me.btnExit.Name = "btnExit"
         Me.btnExit.Size = New System.Drawing.Size(60, 22)
         Me.btnExit.TabIndex = 26
@@ -66,7 +69,7 @@ Partial Class mainForm
         'lblRecords
         '
         Me.lblRecords.AutoSize = True
-        Me.lblRecords.Location = New System.Drawing.Point(620, 422)
+        Me.lblRecords.Location = New System.Drawing.Point(722, 512)
         Me.lblRecords.Name = "lblRecords"
         Me.lblRecords.Size = New System.Drawing.Size(47, 13)
         Me.lblRecords.TabIndex = 31
@@ -74,7 +77,7 @@ Partial Class mainForm
         '
         'txtOrderNum
         '
-        Me.txtOrderNum.Location = New System.Drawing.Point(115, 393)
+        Me.txtOrderNum.Location = New System.Drawing.Point(88, 417)
         Me.txtOrderNum.Name = "txtOrderNum"
         Me.txtOrderNum.Size = New System.Drawing.Size(141, 20)
         Me.txtOrderNum.TabIndex = 32
@@ -82,7 +85,7 @@ Partial Class mainForm
         'lblOrderNum
         '
         Me.lblOrderNum.AutoSize = True
-        Me.lblOrderNum.Location = New System.Drawing.Point(12, 396)
+        Me.lblOrderNum.Location = New System.Drawing.Point(9, 420)
         Me.lblOrderNum.Name = "lblOrderNum"
         Me.lblOrderNum.Size = New System.Drawing.Size(73, 13)
         Me.lblOrderNum.TabIndex = 33
@@ -90,7 +93,7 @@ Partial Class mainForm
         '
         'btnSearch
         '
-        Me.btnSearch.Location = New System.Drawing.Point(272, 391)
+        Me.btnSearch.Location = New System.Drawing.Point(238, 415)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Size = New System.Drawing.Size(60, 22)
         Me.btnSearch.TabIndex = 34
@@ -101,24 +104,25 @@ Partial Class mainForm
         '
         Me.lblSelected.AutoSize = True
         Me.lblSelected.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSelected.Location = New System.Drawing.Point(426, 396)
+        Me.lblSelected.Location = New System.Drawing.Point(144, 389)
         Me.lblSelected.Name = "lblSelected"
-        Me.lblSelected.Size = New System.Drawing.Size(0, 18)
+        Me.lblSelected.Size = New System.Drawing.Size(118, 18)
         Me.lblSelected.TabIndex = 35
+        Me.lblSelected.Text = "None Selected"
         '
         'btnDisplay
         '
-        Me.btnDisplay.Location = New System.Drawing.Point(338, 391)
+        Me.btnDisplay.Location = New System.Drawing.Point(502, 415)
         Me.btnDisplay.Name = "btnDisplay"
-        Me.btnDisplay.Size = New System.Drawing.Size(60, 22)
+        Me.btnDisplay.Size = New System.Drawing.Size(120, 22)
         Me.btnDisplay.TabIndex = 36
-        Me.btnDisplay.Text = "Display"
+        Me.btnDisplay.Text = "Display in Excel"
         Me.btnDisplay.UseVisualStyleBackColor = True
         '
         'lblRootFolder
         '
         Me.lblRootFolder.AutoSize = True
-        Me.lblRootFolder.Location = New System.Drawing.Point(62, 425)
+        Me.lblRootFolder.Location = New System.Drawing.Point(48, 512)
         Me.lblRootFolder.Name = "lblRootFolder"
         Me.lblRootFolder.Size = New System.Drawing.Size(44, 13)
         Me.lblRootFolder.TabIndex = 37
@@ -127,17 +131,39 @@ Partial Class mainForm
         'lblVersion
         '
         Me.lblVersion.AutoSize = True
-        Me.lblVersion.Location = New System.Drawing.Point(15, 425)
+        Me.lblVersion.Location = New System.Drawing.Point(1, 512)
         Me.lblVersion.Name = "lblVersion"
         Me.lblVersion.Size = New System.Drawing.Size(41, 13)
         Me.lblVersion.TabIndex = 38
         Me.lblVersion.Text = "version"
         '
+        'btnSelect
+        '
+        Me.btnSelect.Location = New System.Drawing.Point(343, 415)
+        Me.btnSelect.Name = "btnSelect"
+        Me.btnSelect.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.btnSelect.Size = New System.Drawing.Size(120, 22)
+        Me.btnSelect.TabIndex = 39
+        Me.btnSelect.Text = "Select Order"
+        Me.btnSelect.UseVisualStyleBackColor = True
+        '
+        'lblOracleOrder
+        '
+        Me.lblOracleOrder.AutoSize = True
+        Me.lblOracleOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOracleOrder.Location = New System.Drawing.Point(9, 389)
+        Me.lblOracleOrder.Name = "lblOracleOrder"
+        Me.lblOracleOrder.Size = New System.Drawing.Size(83, 18)
+        Me.lblOracleOrder.TabIndex = 40
+        Me.lblOracleOrder.Text = "Order No."
+        '
         'mainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(821, 525)
+        Me.Controls.Add(Me.lblOracleOrder)
+        Me.Controls.Add(Me.btnSelect)
         Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.lblRootFolder)
         Me.Controls.Add(Me.btnDisplay)
@@ -166,4 +192,6 @@ Partial Class mainForm
     Friend WithEvents btnDisplay As Button
     Friend WithEvents lblRootFolder As Label
     Friend WithEvents lblVersion As Label
+    Friend WithEvents btnSelect As Button
+    Friend WithEvents lblOracleOrder As Label
 End Class
